@@ -1,10 +1,10 @@
 'use client'
 
-import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
+import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import { ArrowUpRightIcon, BanIcon, BoxSelectIcon, CropIcon, DeleteIcon, DownloadCloudIcon, File, Folder, Grid, Grid2X2, Info, InfoIcon, ListMinus, LucideDelete, MoreVertical, PenBoxIcon, ScreenShareIcon, Settings2Icon, Share2Icon, Trash2Icon, ViewIcon, X, ZoomInIcon, ZoomOutIcon } from "lucide-react";
+import { ArrowUpRightIcon, BoxSelectIcon, CropIcon, DownloadCloudIcon, File, Folder, Grid, Grid2X2, Info, InfoIcon, ListMinus, LucideDelete, MoreVertical, PenBoxIcon, ScreenShareIcon, Settings2Icon, Share2Icon, Trash2Icon, ViewIcon, X, ZoomInIcon, ZoomOutIcon } from "lucide-react";
 import Image from "next/image";
 import {
   ContextMenu,
@@ -14,10 +14,9 @@ import {
   ContextMenuSeparator,
   ContextMenuTrigger,
 } from "@/components/ui/context-menu";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Progress } from "@/components/ui/progress";
-import { Preview } from "@/components/preview/preview";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { DialogClose } from "@radix-ui/react-dialog";
 import { useSearchStore } from "@/components/remember/rememberState";
 
@@ -41,7 +40,6 @@ export default function Home() {
   const [files, setFiles] = useState<FilesProps[]>([]);
   const [folderBread, setFolderBread] = useState<string[]>(['root']);
   const [currentFiles, setCurrentFiles] = useState<FilesProps[]>([]);
-  const [searchQuery, setSearchQuery] = useState<string>('');
 
   const [selectedFile, setSelectedFile] = useState<string>('')
 
@@ -82,7 +80,7 @@ export default function Home() {
     return [];
   };
 
-  const filteredFiles = currentFiles.filter(file =>
+  const filteredFiles = currentFiles?.filter(file =>
     file.name.toLowerCase().includes(searchQueryState.toLowerCase())
   );
 
@@ -161,7 +159,7 @@ export default function Home() {
                         className="flex flex-col h-fit items-center md:border-0 hover:rounded-lg  hover:bg-muted/20 bg-muted/0 rounded-[0px]">
                         <CardContent className="relative p-5">
                           <Image
-                            alt="folder"
+                            alt={item.name}
                             width={1000}
                             height={1000}
                             src={item.uri != null ? item.uri : item.isDirectory ? '/@base-icons/folder_icon.png' : '/@base-icons/office_notes.png'}

@@ -6,6 +6,8 @@ import dotenv from 'dotenv';
 import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
+import detectImage from './utilies/detectImage';
+import { env } from 'process';
 
 // Load environment variables
 dotenv.config();
@@ -14,6 +16,7 @@ const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dev });
 const handle = app.getRequestHandler();
 const port = process.env.PORT || 3000;
+const directpath = process.env.PATHS || '/public'
 
 // Resolve __dirname for ES module
 const __filename = fileURLToPath(import.meta.url);
@@ -36,7 +39,7 @@ app.prepare().then(() => {
     server.use(express.urlencoded({ extended: true }));
 
     // Serve static files from the '~storage' directory
-    const storagePath = path.join(__dirname, '~storage');
+    const storagePath = path.join(__dirname, directpath);
     server.use('/files', express.static(storagePath));
 
     server.use((req, res, next) => {
@@ -61,6 +64,8 @@ app.prepare().then(() => {
                     }
                     const relativePath = path.relative(storagePath, filePath).replace(/\\/g, '/');
                     console.log(`File: ${file.name}, Relative Path: ${relativePath}`);
+
+                    const urlImager = detectImage(relativePath, port)
                     return {
                         name: file.name,
                         isDirectory: file.isDirectory(),
@@ -68,7 +73,7 @@ app.prepare().then(() => {
                         path: filePath,
                         size: stats.size,
                         numItems: children.length,
-                        uri: file.isFile() ? `http://localhost:${port}/files/${relativePath}` : null,
+                        uri: file.isFile() ? urlImager : null,
                         children: file.isDirectory() ? children : null
                     };
                 }));
