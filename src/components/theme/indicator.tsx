@@ -1,3 +1,6 @@
+import { PlusIcon } from "lucide-react"
+import { Button } from "../ui/button"
+
 export function Indicator() {
     if (process.env.NODE_ENV === "production") return null
 
@@ -9,6 +12,21 @@ export function Indicator() {
             <div className="hidden lg:block xl:hidden">lg</div>
             <div className="hidden xl:block 2xl:hidden">xl</div>
             <div className="hidden 2xl:block">2xl</div>
+        </div>
+    )
+}
+
+export function FloatingButton() {
+    if (process.env.NODE_ENV === "production") return null
+
+    return (
+        <div className="fixed bottom-1 right-1 p-2">
+            <Button
+                variant={"ghost"}
+                size={"icon"}
+                className="size-16 rounded-full bg-muted/100">
+                <PlusIcon />
+            </Button>
         </div>
     )
 }
